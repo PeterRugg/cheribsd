@@ -274,9 +274,19 @@ query:
 			gpart_destroy(gpart);
 		}
 
+		/*
+		 * For CheriBSD/Morello, don't bother prompting for the
+		 * partition type when using the entire disk -- always use
+		 * GPT.  This should possibly be if defined(__aarch64__)
+		 * instead.
+		 */
+#if 0
 		scheme = choose_part_type(default_scheme());
 		if (scheme == NULL)
 			return NULL;
+#else
+		scheme = default_scheme();
+#endif
 		gpart_partition(disk, scheme);
 	}
 
